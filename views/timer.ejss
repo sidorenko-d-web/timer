@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            overflow: hidden;
+        }
+        .container{
+            display: flex;
+            height: 800px;
+        }
+        .resultPanel{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: lightgreen;
+            width: 35%;
+            overflow:scroll;
+        }
+        .resContain{
+            background-color: lightyellow;
+            width: 100%;
+            font-size: 40px;
+            display: flex;
+        }
+        .prevRes{
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 20%;
+            font-size: 20px;
+            padding-top: 5%;
+        }
+        .prevScrambles{
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 80%;
+            padding-top: 5%;
+            font-size: 20px;
+
+        }
+        span{
+            border-bottom:1px  solid black;
+            border-top:1px  solid black;
+            height: 50px;
+            min-height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px
+            
+        }
+        .scr{
+            height: 50PX;
+            text-align: left;
+            display: flex;
+            justify-content: left;
+        }
+        .time{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            background-color: rgb(240, 128, 128);
+            width: 80%;
+            height: 100%;
+            font-size: 100px;
+
+        }
+        .num{
+            width: 100px;
+            text-align: center;
+        }
+        .scramble{
+            width: 100%;
+            height: 50px;
+            font-size: 40px;
+            text-align: center;
+        }
+        .generalWrapper{
+            display: flex;
+            margin: auto;
+
+        }
+        .newScrBtn{
+            position: absolute;
+            right: 10px;
+            top: 14px;
+            height: 40px;
+            width: 100px;
+        }
+        .newScrBtn:focus{
+            border: 1px solid black;
+        }
+        .newScrBtn:hover{
+            background-color: lightgray;
+            border: 1px solid black;
+        }
+        .avgContain{
+            background-color: lightblue;
+            width: 100%;
+            display: flex;
+        }
+        .avgDisplay{
+            width: 33%;
+            border: 1px solid red;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+        }
+        .name{
+            text-align: center;
+            font-size: 40px;
+        }
+        .deleteAll{
+            margin-left: 90%;
+            height: 50px;
+            width: 100px;
+        }
+        .popup{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            top: 0;
+            right: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .popupWin{
+            width: 40%;
+            height: 40%;
+            background-color: lightpink;
+            display: flex;
+            flex-direction: column;
+
+            
+        }
+        .thisTime{
+            font-size: 40px;
+            margin-bottom: 50px;
+        }
+        .close{
+            height: 50px;
+            margin-left: 90%;
+            
+        }
+        .popupTimeContain{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            height: 100%;
+        }
+        .deleteSolve{
+            background-color: aqua;
+            font-size: 30px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="resultPanel">
+            <p>results</p>
+            <div class="avgContain">
+                <div class="avgDisplay">
+                    <div class="name">avg5</div>
+                    <div class="avg5Display name"></div>
+                </div>
+                <div class="avgDisplay">
+                    <div class="name">avg12</div>
+                    <div class="avg12Display name"></div>
+
+                </div>
+                <div class="avgDisplay">
+                    <div class="name">avg100</div>
+                    <div class="avg100Display name"></div>
+
+                </div>
+            </div>
+            <div class="resContain">  
+                <div class="prevRes"></div>
+                <div class="prevScrambles"></div>
+            </div>
+        </div>
+        <div class="time">
+            <div class="scramble"><div class="scrString"></div><button class="newScrBtn" onclick="updateScr()">new scramble</button></div>
+            <div class="generalWrapper">
+                
+                <div class="num" id="min">00</div>:
+                <div class="num" id="sec">00</div>.
+                <div class="num" id="ms">00</div>
+            </div>
+            <button class="deleteAll" onclick="deleteAll()">Delete all</button>
+        </div>
+    </div>
+    <div class="popup">
+        <div class="popupWin">
+            <button class='close' onclick="closePopup()">close</button>
+            <div class="popupTimeContain">
+                <div class="thisTime">00:00.00</div>
+                <div class="thisScramble">scr</div>
+                <button class="deleteSolve" onclick="deleteSolve()">delete</button>
+            </div>
+
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Timer</title>
+    <script src="https://cdn.cubing.net/js/scramble-display" type="module"></script>
+</head>
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+    <div class="resPanel">
+        <div class="session">
+            <span class="currentSession"><%=currentPuzzle%></span>
+        </div>
+        <div class="avgContain">
+            <div class="avg">
+                <span>AVG5</span>
+                <span class="avg5Display"></span>
+            </div>
+            <div class="stroke"></div>
+            <div class="avg">
+                <span>AVG12</span>
+                <span class="avg12Display"></span>
+            </div>
+            <div class="stroke"></div>
+            <div class="avg">
+                <span style="font-size:40px">AVG100</span>
+                <span class="avg100Display"></span>
+
+            </div>
+        </div>
+        <div class="prevRes">
+        </div>
+    </div>
+    <div class="midPanel">
+        <div class="scrambleDisplay"><span class="scrString"></span></div>
+        <div class="time">
+            <div class="min">00</div>:
+            <div class="sec">00</div>.
+            <div class="ms">00</div>
+        </div>
+        <div class="censored"><div class="solving">Solving</div></div>
+        <scramble-display scramble=""></scramble-display>
+    </div>
+    <div class="wrapperSettings">
+        <div class="settings">
+            <div class="settingsImages">
+                <img width="59px" src="./img/Mask group.png" alt="">
+                <img class="strelka"  src="./img/Group 1 (1).png" alt="">
+            </div>
+            <div class="mainSettings">
+                <div class="name">Settings</div>
+                <div class="nameSection">Server</div>
+                <% if (!currentUser) { %>
+                    <form action="/login" method="post">
+                        <div class="login">
+                            <label for="login">Login</label> <input autocomplete="off" id="login" name="login" type="text">
+                        </div>
+                        <div class="password">
+                            <label for="password">Password</label> <input autocomplete="off" id="password" name="password" type="text">
+                        </div>
+                        <button class="submit">Log in</button>
+                    </form>
+                <% } else{ %>
+                    <span class="currentUser">Current user: <%= currentUser %> </span>
+                    <form action="/logout" method="post"> 
+                        <button class="logout">Log out</button>
+                    </form>
+                <% } %> 
+                <div class="stroke"></div>
+                <div class="nameSection">Timer</div>
+                <div class="showTime">
+                    <label for="checkbox">Show time</label>
+                    <div class="showTime-toogle">
+                        <input class="checkboxShowTime" id="checkbox" type="checkbox" checked>
+                        <label class="checkbox-label" for="checkbox"></label>
+                    </div>
+                </div>
+                <button class="deleteAllSessions">Delete all sessions</button>
+                <button class="deleteAll">Clear session</button>
+                <div class="stroke"></div>
+                <div class="nameSection">Credits</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup">
+        <div class="popupContent">
+            <div class="thisScramble"></div>
+            <div class="thisTime">00:00.00</div>
+            <div class="popupBTNS">
+                <button class="deleteSolve popupBtn">X</button>
+                <button class="plus2 popupBtn">+2</button>
+                <button class="dnf popupBtn">DNF</button>
+            </div>
+        </div>
+    </div>
+    <div class="sessionPopup">
+        <div class="popupContent">
+            <form action="/puzzle" method="post">
+                <button class="222 puzzleBtn">222</button>
+                <button class="333 puzzleBtn" >333</button>
+                <button class="444 puzzleBtn">444</button>
+                <button class="555 puzzleBtn">555</button>
+                <button class="555 puzzleBtn">666</button>
+                <button class="555 puzzleBtn">777</button>
+                <button class="skewb puzzleBtn">skewb</button>
+                <button class="sq1 puzzleBtn">sq1</button>
+            </form>
+        </div>
+    </div>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
