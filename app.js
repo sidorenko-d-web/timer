@@ -5,9 +5,11 @@ let bodyParser = require('body-parser')
 const MongoClient = require('mongodb').MongoClient
 let urlencodedParser = bodyParser.urlencoded({ extended: false })
 const http = require('http')
-const server = http.Server(app).listen(8080)
+const port = process.env.PORT || 8080;
+const server = http.Server(app).listen(port)
 const io = require('socket.io')(server)
-const mongoClient = new MongoClient('mongodb://localhost:27017/', {useNewUrlParser: true, useUnifiedTopology:true})
+const url = 'mongodb+srv://BigBanka:505mongo@cluster0.bs3kxm4.mongodb.net/results?retryWrites=true&w=majority'
+const mongoClient = new MongoClient(url, {useNewUrlParser: true, useUnifiedTopology:true})
 const cookie = require('cookie')
 const cookieParser = require('cookie-parser')
 const { connection } = require('mongoose')
