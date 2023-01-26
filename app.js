@@ -7,7 +7,7 @@ let urlencodedParser = bodyParser.urlencoded({ extended: false })
 const http = require('http')
 const port = process.env.PORT || 8080;
 const server = http.Server(app).listen(port)
-consoe.log(port)
+console.log(port)
 const io = require('socket.io')(server)
 const mongoClient = new MongoClient('mongodb://localhost:27017/', {useNewUrlParser: true, useUnifiedTopology:true})
 const cookie = require('cookie')
