@@ -7,6 +7,7 @@ let urlencodedParser = bodyParser.urlencoded({ extended: false })
 const http = require('http')
 const port = process.env.PORT || 8080;
 const server = http.Server(app).listen(port)
+console.log(port)
 const io = require('socket.io')(server)
 const url = 'mongodb+srv://BigBanka:505mongo@cluster0.bs3kxm4.mongodb.net/results?retryWrites=true&w=majority'
 const mongoClient = new MongoClient(url, {useNewUrlParser: true, useUnifiedTopology:true})
