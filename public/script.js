@@ -23,6 +23,10 @@ let avg5Display = document.querySelector('.avg5Display')
 let avg12Display = document.querySelector('.avg12Display')
 let avg100Display = document.querySelector('.avg100Display')
 
+let avg5DisplayMobile = document.querySelector('.avg5DisplayMobile')
+let avg12DisplayMobile = document.querySelector('.avg12DisplayMobile')
+let avg100DisplayMobile = document.querySelector('.avg100DisplayMobile')
+
 let popup = document.querySelector('.popup')
 let sessionPopup = document.querySelector('.sessionPopup')
 
@@ -34,6 +38,7 @@ let dnfBtn = document.querySelector('.dnf')
 
 let currentPuzzle = document.querySelector('.currentSession')
 let scramblePicElem = document.querySelector('scramble-display')
+let mobileScramblePicElem = document.querySelector('.mobileScrDisp')
 
 let sessionBtns = document.querySelectorAll('.puzzleBtn')
 let loginBtn = document.querySelector('.submit')
@@ -41,6 +46,14 @@ let loginBtn = document.querySelector('.submit')
 let showTimeCheck = document.querySelector('.checkboxShowTime')
 let censoredBlock = document.querySelector('.censored')
 
+let midPanel = document.querySelector('.btnForStart')
+
+let mobileSession = document.querySelector('.mobileSession')
+let mobileStatistic = document.querySelector('.mobileStatistic')
+let mobileSettings = document.querySelector('.mobileSettings')
+
+let popupContent = document.querySelector('.popupContent')
+let wrapperSettings = document.querySelector('.wrapperSettings')
 
 
 
@@ -57,8 +70,9 @@ document.onkeydown=function(e){
 
 
 //работа основного дисплея
-document.addEventListener('keyup', async (event)=>{
-    if(event.code == "Space"){
+
+let keyup = async (event)=>{
+    if(event.code == "Space"||event.targetTouches.length == 0){
         clearInterval(Interval)
         if(counter == true){
             if(!showTimeCheck.checked){
@@ -77,10 +91,10 @@ document.addEventListener('keyup', async (event)=>{
         }
     }
     
-})
+}
 
-document.addEventListener('keydown', (event)=>{
-    if(event.code == "Space"){
+let keydown = (event)=>{
+    if(event.code == "Space"||event.targetTouches.length == 1){
         if(counter == true){
             display.style.color='green'
             scrDisplay.style.color="black"
@@ -100,7 +114,12 @@ document.addEventListener('keydown', (event)=>{
             
         }
     }
-})
+}
+
+document.addEventListener('keyup', keyup)
+document.addEventListener('keydown', keydown)
+midPanel.addEventListener('touchend', keyup)
+midPanel.addEventListener('touchstart', keydown)
 
 let clearDisplay = ()=>{
     mspanel.innerHTML = '00'
@@ -145,6 +164,12 @@ let showRes = (res,scr)=>{
         if(data.solves.length>=5) avg5Display.innerHTML = countAvg(data.solves,5)
         if(data.solves.length>=12) avg12Display.innerHTML = countAvg(data.solves,12)
         if(data.solves.length>=100)avg100Display.innerHTML = countAvg(data.solves,100)
+
+        
+        if(data.solves.length>=5) avg5DisplayMobile.innerHTML = countAvg(data.solves,5)
+        if(data.solves.length>=12) avg12DisplayMobile.innerHTML = countAvg(data.solves,12)
+        if(data.solves.length>=100)avg100DisplayMobile.innerHTML = countAvg(data.solves,100)
+
         for(let i = 0;i<data.solves.length;i++){
             resStr = resStr+('<span class="solve" id ="'+i+'">' + data.solves[i].solve+'</span><div class="stroke"></div>')
         }
@@ -175,6 +200,8 @@ let newScramble = async ()=>{
     const scramble = await randomScrambleForEvent(currentPuzzle.innerHTML);
     scramblePicElem.scramble = scramble.toString()
     scramblePicElem.event = currentPuzzle.innerHTML
+    mobileScramblePicElem.scramble = scramble.toString()
+    mobileScramblePicElem.event = currentPuzzle.innerHTML
 
     return scramble.toString()
 }
@@ -238,6 +265,10 @@ popup.addEventListener('click',() => {
 sessionPopup.addEventListener('click',() => {
     sessionPopup.style.display = 'none'
 })
+wrapperSettings.addEventListener('click',() =>{
+    console.log('close')
+    wrapperSettings.style.display = 'none'
+})
 
 deleteSolveBtn.addEventListener('click',() => {
     let elemForDelete = document.querySelector('.thisTime')
@@ -280,3 +311,10 @@ if(loginBtn){
         },1000)
     })
 }
+
+mobileSession.addEventListener('click', ()=>{
+    sessionPopup.style.display = 'block'
+})
+mobileSettings.addEventListener('click', () => {
+    wrapperSettings.style.display = 'block'
+})

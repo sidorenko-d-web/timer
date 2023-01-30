@@ -13,7 +13,7 @@ const url = 'mongodb+srv://BigBanka:505mongo@cluster0.bs3kxm4.mongodb.net/result
 const mongoClient = new MongoClient(url, {useNewUrlParser: true, useUnifiedTopology:true})
 const cookie = require('cookie')
 const cookieParser = require('cookie-parser')
-const { connection } = require('mongoose ')
+const { connection } = require('mongoose')
 
 let currentPuzzle = '333'
 let currentUser = null  

@@ -1,10 +1,12 @@
 @font-face {
     font-family: Inter;
-    src: url('./fonts/Inter/static/Inter-Regular.ttf');
+    src: url('../fonts/Inter/static/Inter-Regular.ttf');
 }@font-face {
     font-family: Staatliches;
-    src: url('./fonts/Staatliches/Staatliches-Regular.ttf');
+    src: url('../fonts/Staatliches/Staatliches-Regular.ttf');
 }
+@media only screen and (min-width: 768px) {
+    
 
 body{
     background-color: rgb(39, 59, 76);
@@ -326,5 +328,16 @@ body{
     font-size: 170px;
     font-weight: 800;
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+
+}
+.avg100str{
+    font-size:40px
+}
+
+.mobileBlock{
+   display: none;     
+}
+
+
 
 }
