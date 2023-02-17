@@ -54,6 +54,9 @@ let mobileSettings = document.querySelector('.mobileSettings')
 
 let popupContent = document.querySelector('.popupContent')
 let wrapperSettings = document.querySelector('.wrapperSettings')
+let wrapperSettings1 = document.querySelector('.wrapperSettings1')
+let settings = document.querySelector('.settings')
+
 
 
 
@@ -265,10 +268,15 @@ popup.addEventListener('click',() => {
 sessionPopup.addEventListener('click',() => {
     sessionPopup.style.display = 'none'
 })
-wrapperSettings.addEventListener('click',() =>{
-    console.log('close')
+
+wrapperSettings.addEventListener('click', ()=>{
+    console.log('clos')
     wrapperSettings.style.display = 'none'
+    wrapperSettings1.style.display = 'none'
 })
+
+
+
 
 deleteSolveBtn.addEventListener('click',() => {
     let elemForDelete = document.querySelector('.thisTime')
@@ -316,5 +324,7 @@ mobileSession.addEventListener('click', ()=>{
     sessionPopup.style.display = 'block'
 })
 mobileSettings.addEventListener('click', () => {
+    console.log('block')
+    wrapperSettings1.style.display = 'block'
     wrapperSettings.style.display = 'block'
 })
