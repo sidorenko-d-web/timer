@@ -3,11 +3,13 @@
     body{
         background-color: #273B4C;
         height: 96vh;
+        height: calc(var(--vh, 1vh) * 100);
         display: flex;
         flex-direction: column;
         font-family: "Inter";
         padding: 10px;
         margin: 0;
+        border: 1px solid red;
     }
     .settingsImages, .avgContain, .prevRes, .session, .popup, .censored, .scrDispForPc{
         display: none;
