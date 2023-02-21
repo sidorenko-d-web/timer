@@ -1,3 +1,3 @@
-/node_modules/*
-
-/view/test.html
+node_modules/*
+views/test.html
+node_modules.zip
