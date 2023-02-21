@@ -6,12 +6,12 @@
     }
     body{
         background-color: #273B4C;
-        height: 92.3354vh;
         display: flex;
         flex-direction: column;
         font-family: "Inter";
         padding: 10px;
         margin: 0;
+        overflow: hidden;
     }
     .settingsImages, .avgContain, .prevRes, .session, .popup, .censored, .scrDispForPc{
         display: none;
@@ -24,12 +24,12 @@
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        height: 100vh;
+        height: 100%;
 
     }
     .time{
         position: absolute;
-        top: 40%;
+        top: 30%;
         left: 50%;
         transform: translateY(-50%);
         transform: translateX(-50%);

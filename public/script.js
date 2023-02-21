@@ -58,6 +58,10 @@ let wrapperSettings1 = document.querySelector('.wrapperSettings1')
 let settings = document.querySelector('.settings')
 
 
+document.getElementsByTagName("body")[0].style.height =( window.innerHeight-20)+'px'
+
+
+
 
 
 var SPACE_KEYCODE=32;
