@@ -13,7 +13,6 @@
         padding: 10px;
         margin: 0;
         border: 1px solid red;
-        
     }
     .settingsImages, .avgContain, .prevRes, .session, .popup, .censored, .scrDispForPc{
         display: none;
