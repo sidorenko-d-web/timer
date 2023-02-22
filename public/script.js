@@ -80,7 +80,35 @@ document.onkeydown=function(e){
 //работа основного дисплея
 
 let keyup = async (event)=>{
-    if(event.code == "Space"||event.targetTouches.length == 0){
+    if(window.innerWidth >= 768){
+        if(event.code == "Space"){
+            
+        keyupFunc()
+        }
+    }
+    else {
+        if (event.targetTouches.length == 0){
+            
+        keyupFunc()
+        }
+    }
+}
+
+let keydown = (event)=>{
+    if(window.innerWidth >= 768){
+        if(event.code == "Space"){
+            keydownFunc()
+        }
+    }
+    else {
+        if (event.targetTouches.length == 1){
+            keydownFunc()
+        }
+    }
+}
+
+let keyupFunc = async () => {
+    
         clearInterval(Interval)
         if(counter == true){
             if(!showTimeCheck.checked){
@@ -97,30 +125,28 @@ let keyup = async (event)=>{
             counter = true
             scrDisplay.innerHTML = await newScramble()
         }
-    }
     
 }
 
-let keydown = (event)=>{
-    if(event.code == "Space"||event.targetTouches.length == 1){
-        if(counter == true){
-            display.style.color='green'
-            scrDisplay.style.color="black"
-        }else{
-            censoredBlock.style.display = 'none'
-            clearInterval(Interval)  
-            if(min!= 0){
-                if(sec<=9&&min>0)sec='0'+sec
-                if(ms<=9)ms='0'+ms
-                showRes(min+':'+sec+'.'+ms,scrDisplay.innerHTML)
-                
-            }
-            else{
-                if(ms<=9)ms='0'+ms
-                showRes(sec+'.'+ms,scrDisplay.innerHTML)
-            }
+let keydownFunc = () => {
+    
+    if(counter == true){
+        display.style.color='green'
+        scrDisplay.style.color="black"
+    }else{
+        censoredBlock.style.display = 'none'
+        clearInterval(Interval)  
+        if(min!= 0){
+            if(sec<=9&&min>0)sec='0'+sec
+            if(ms<=9)ms='0'+ms
+            showRes(min+':'+sec+'.'+ms,scrDisplay.innerHTML)
             
         }
+        else{
+            if(ms<=9)ms='0'+ms
+            showRes(sec+'.'+ms,scrDisplay.innerHTML)
+        }
+        
     }
 }
 
