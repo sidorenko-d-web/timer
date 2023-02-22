@@ -17,6 +17,7 @@ const { connection } = require('mongoose')
 
 let currentPuzzle = '333'
 let currentUser = null  
+let showTimeCheckStatus = true
 
 
 mongoClient.connect(function(err, client){
@@ -74,7 +75,15 @@ mongoClient.connect(function(err, client){
                     }
                 })
             })
+
+            collectionUsers.findOne({login:currentUser},(err, doc)=>{
+                console.log(doc.showTimeCheckStatus)
+                console.log("showTimeCheckStatus")
+                socket.emit('showTimeCheckRes', doc.showTimeCheckStatus)
+            })
         }
+
+
         socket.on('deleteAll', ()=>{
             collectionSolves.drop()
             solves=[]
@@ -126,6 +135,15 @@ mongoClient.connect(function(err, client){
         socket.on('changePuzzle', (puzzle) => {
             currentPuzzle = puzzle
         })
+
+        socket.on('showTimeCheckReq', (bolean)=>{
+            collectionUsers.findOne({login: currentUser},(err,doc)=>{
+                if(doc){
+                collectionUsers.updateOne({login: currentUser},{$set:{showTimeCheckStatus:bolean}})
+                console.log(bolean)
+                }
+            })
+        })
     })
 
 
@@ -159,7 +177,8 @@ mongoClient.connect(function(err, client){
             else{
                 collectionUsers.insertOne({
                                             login:req.body.login,
-                                            password:req.body.password})
+                                            password:req.body.password,
+                                            showTimeCheckStatus:true})
                 console.log('new user is created')
                 res.cookie('currentUser',req.body.login)
                 currentUser = req.body.login
