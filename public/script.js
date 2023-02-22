@@ -275,7 +275,6 @@ sessionPopup.addEventListener('click',() => {
 })
 
 wrapperSettings.addEventListener('click', ()=>{
-    console.log('clos')
     wrapperSettings.style.display = 'none'
     wrapperSettings1.style.display = 'none'
 })
@@ -329,7 +328,17 @@ mobileSession.addEventListener('click', ()=>{
     sessionPopup.style.display = 'block'
 })
 mobileSettings.addEventListener('click', () => {
-    console.log('block')
     wrapperSettings1.style.display = 'block'
     wrapperSettings.style.display = 'block'
 })
+
+showTimeCheck.addEventListener('change', ()=>{
+    console.log(showTimeCheck.checked)
+    socket.emit('showTimeCheckReq', showTimeCheck.checked)
+})
+socket.on('showTimeCheckRes',(bolean)=>{
+    console.log(bolean)
+    showTimeCheck.checked = bolean
+})
+
+
