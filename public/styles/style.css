@@ -14,11 +14,11 @@ body{
     margin: 0;
     display: flex;
     font-family: "Inter";
-    height: 800px;
+    height: 100vh;
     justify-content: space-between;
 }
 .resPanel{
-    height: 800px;
+    height: 100vh ;
     width: 15%;
     overflow: scroll;
     margin: 0;
@@ -77,12 +77,16 @@ body{
     background-color: black; 
 }
 
-
+.btnForStart{
+    display: none
+}
 .midPanel{
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 70%;
+    height: 100vh;
+    justify-content: space-between;
 }
 
 
@@ -113,14 +117,15 @@ body{
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    margin-top: 300px;
-    margin-left: 2%;
     font-size: 170px;
     color: white;
     font-family: Staatliches;
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
     letter-spacing: 20px;
     z-index: -1;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 .ms{
     width: 100px;
@@ -133,6 +138,7 @@ body{
 
 .wrapperSettings1{
     width: 15%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -142,7 +148,7 @@ body{
     flex-wrap: wrap;
     border-radius: 40px;
     background-color: white;
-    height: 890px;
+    height: 100vh;
     width: 61px;
     justify-content: center;
     align-items: flex-start;
@@ -338,6 +344,21 @@ body{
    display: none;     
 }
 
+.puzzles{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
 
-
+.puzzleBtn{
+    width: 100px;
+    height:60px;
+    background: rgb(39, 59, 76);
+    color: #fff;
+    border-radius: 15px;
+    margin: 1px;
+    border:none;
+    font-size: 30px;
+    font-weight: bold;
 }

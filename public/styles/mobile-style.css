@@ -135,27 +135,33 @@
         top: 0;
         left: 0;
         position: absolute;
-        width: 101%;
+        width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.5);
+        overflow: hidden;
     }
+
 
     .sessionPopup .popupContent{
         position: absolute;
         top: 2%;
         width: 85%;
         height: 80%;
+
+        transform: translateX(-100%);
         background-color: white;
         border-radius: 0 32px 32px 0;
-        transition: 1s;
+        transition: 0.5s;
+        overflow: hidden;
     }
     .puzzles{
         display: flex;
         height: 100%;
         padding: 10px;
         flex-direction: column;
-        width: 40%;
+        width: 100%;
         overflow: scroll;
+        overflow-x: hidden; 
     }
     .puzzleBtn{
         height: 8%;
@@ -163,14 +169,15 @@
         border: none;
         background-color: white;
         font-size: 40px;
+        color: black
     }
     
     .wrapperSettings1{
         display: none;
     }
+
     .wrapperSettings{
         z-index: 4;
-        display: none;
         position: absolute;
         background-color: rgba(0, 0, 0, 0.5);
         width: 100%;
@@ -191,6 +198,8 @@
         padding: 0px;
         overflow: scroll;
         z-index: 5;
+        transform: translate(100%);
+        transition: 0.5s;
     }
     .mainSettings{
         padding: 20px;
