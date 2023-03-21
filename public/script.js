@@ -22,6 +22,7 @@ let scrambles =[]
 let avg5Display = document.querySelector('.avg5Display')
 let avg12Display = document.querySelector('.avg12Display')
 let avg100Display = document.querySelector('.avg100Display')
+let bestDisplay = document.querySelector('.bestDisplay')
 
 let avg5DisplayMobile = document.querySelector('.avg5DisplayMobile')
 let avg12DisplayMobile = document.querySelector('.avg12DisplayMobile')
@@ -37,6 +38,7 @@ let deleteSolveBtn = document.querySelector('.deleteSolve')
 let dnfBtn = document.querySelector('.dnf')
 
 let currentPuzzle = document.querySelector('.currentSession')
+let openSessionPopup = document.querySelector('.session')
 let scramblePicElem = document.querySelector('scramble-display')
 let mobileScramblePicElem = document.querySelector('.mobileScrDisp')
 
@@ -53,6 +55,7 @@ let mobileStatistic = document.querySelector('.mobileStatistic')
 let mobileSettings = document.querySelector('.mobileSettings')
 
 let popupContent = document.querySelector('.popupContent')
+let popupContent2 = document.querySelector('#two')
 let wrapperSettings = document.querySelector('.wrapperSettings')
 let wrapperSettings1 = document.querySelector('.wrapperSettings1')
 let settings = document.querySelector('.settings')
@@ -286,25 +289,37 @@ let countAvg = (solves,num)=>{
 }
 
 deleteAllBtn.addEventListener('click',() => {
-    socket.emit('deleteAll')
+    socket.emit('deleteCurrentSession')
     prevRes.innerHTML = ''
     avg5Display.innerHTML = ''
     avg12Display.innerHTML = ''
     avg100Display.innerHTML = ''
+    bestDisplay.innerHTML = ''
 })
  
 popup.addEventListener('click',() => {
     popup.style.display = 'none'
 })
 sessionPopup.addEventListener('click',() => {
-    sessionPopup.style.display = 'none'
+    if(window.innerWidth >= 768){
+         sessionPopup.style.display = 'none'
+    }else{
+        popupContent2.style.transform = 'translateX(-100%)'
+        setTimeout(()=>{
+            sessionPopup.style.display = 'none'
+        },500)
+    }
+
+    
 })
 
 wrapperSettings.addEventListener('click', ()=>{
-    wrapperSettings.style.display = 'none'
-    wrapperSettings1.style.display = 'none'
+    settings.style.transform = 'translateX(100%)'
+    setTimeout(()=>{
+        wrapperSettings.style.display = 'none'
+        wrapperSettings1.style.display = 'none'
+    },500)
 })
-
 
 
 
@@ -327,7 +342,7 @@ dnfBtn.addEventListener('click',() => {
     socket.emit('dnf', elemForChange.id)
 })
 
-currentPuzzle.addEventListener('click',() => {
+openSessionPopup.addEventListener('click',() => {
     sessionPopup.style.display = 'block'
 })
 
@@ -352,19 +367,25 @@ if(loginBtn){
 
 mobileSession.addEventListener('click', ()=>{
     sessionPopup.style.display = 'block'
+    setTimeout(()=>{
+        popupContent2.style.transform = 'translateX(0%)'
+    },1)
+    
 })
 mobileSettings.addEventListener('click', () => {
     wrapperSettings1.style.display = 'block'
     wrapperSettings.style.display = 'block'
+    setTimeout(()=>{
+        settings.style.transform = 'translateX(0%)'
+    },1)
 })
 
 showTimeCheck.addEventListener('change', ()=>{
-    console.log(showTimeCheck.checked)
     socket.emit('showTimeCheckReq', showTimeCheck.checked)
 })
 socket.on('showTimeCheckRes',(bolean)=>{
-    console.log(bolean)
     showTimeCheck.checked = bolean
 })
-
-
+socket.on('newBest',(data) => {
+    bestDisplay.innerHTML = data.best
+})
