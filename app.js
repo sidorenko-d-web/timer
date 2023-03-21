@@ -18,6 +18,7 @@ const { connection } = require('mongoose')
 let currentPuzzle = '333'
 let currentUser = null  
 let showTimeCheckStatus = true
+let currentBest = ''
 
 
 mongoClient.connect(function(err, client){
@@ -26,7 +27,9 @@ mongoClient.connect(function(err, client){
         return console.log(err)
     }
 
-    console.log('Success')
+    
+        console.log('Success')
+
 
     const db = client.db('results')
     const collectionSolves = db.collection('solves')
@@ -38,7 +41,6 @@ mongoClient.connect(function(err, client){
 
     io.on('connection', (socket)=>{
         let solves = []
-        
         if(socket.handshake.headers.cookie){
                 
             currentUserCookie = cookie.parse(socket.handshake.headers.cookie); 
@@ -47,6 +49,7 @@ mongoClient.connect(function(err, client){
             collectionSolves.findOne({name:currentUserCookie.currentUser, puzzle:currentPuzzle}, (err,doc)=>{
                 if(doc){
                     socket.emit('getData',{ solves:doc.solves})
+                    socket.emit('newBest',{best:doc.best})
                     
                 }
             })
@@ -57,36 +60,41 @@ mongoClient.connect(function(err, client){
             socket.on('getResList',(data)=>{
                 collectionSolves.findOne({name:currentUser, puzzle:currentPuzzle}, function(err,doc){
                     if(doc){
-                    solves = []
-                    for(let i = doc.solves.length; i > 0; i--){
-                        solves.unshift(doc.solves[i-1])
-                    }
+                        currentBest = doc.best
+                        if(Number(doc.best)>Number(data.solve)){
+                            collectionSolves.updateOne({name:currentUser, puzzle:currentPuzzle},{$set:{best:data.solve}})
+                            socket.emit('newBest',{best:data.solve})
+                        }
+                        solves = []
+                        for(let i = doc.solves.length; i > 0; i--){
+                            solves.unshift(doc.solves[i-1])
+                        }
                         solves.unshift({solve:data.solve, scramble:data.scramble})
                         collectionSolves.updateOne({name:currentUser, puzzle:currentPuzzle},{$set:{solves:solves}})
                         socket.emit('showRes',{solves:solves,})
+                        
                     }
                     else if(!doc){
                         console.log('first result')
 
                         solves.unshift({solve:data.solve,scramble:data.scramble})
 
-                        collectionSolves.insertOne({name:currentUser, puzzle:currentPuzzle, solves:solves})
+                        collectionSolves.insertOne({name:currentUser, puzzle:currentPuzzle, solves:solves, best:data.solve})
                         socket.emit('showRes',{solves:solves})
                     }
                 })
             })
 
             collectionUsers.findOne({login:currentUser},(err, doc)=>{
-                console.log(doc.showTimeCheckStatus)
-                console.log("showTimeCheckStatus")
                 socket.emit('showTimeCheckRes', doc.showTimeCheckStatus)
             })
         }
 
 
-        socket.on('deleteAll', ()=>{
-            collectionSolves.drop()
-            solves=[]
+        socket.on('deleteCurrentSession', ()=>{
+            collectionSolves.deleteOne({name:currentUser, puzzle:currentPuzzle}, (err, doc)=>{
+                console.log("current session has been deleted")
+            })
         })
         socket.on('getDataForPopup',(data)=>{
             collectionSolves.findOne({name:currentUser, puzzle:currentPuzzle}, (err, doc)=>{
@@ -140,7 +148,6 @@ mongoClient.connect(function(err, client){
             collectionUsers.findOne({login: currentUser},(err,doc)=>{
                 if(doc){
                 collectionUsers.updateOne({login: currentUser},{$set:{showTimeCheckStatus:bolean}})
-                console.log(bolean)
                 }
             })
         })
@@ -153,8 +160,11 @@ mongoClient.connect(function(err, client){
     app.use(express.static(__dirname + '/public'));
 
     app.set('view engine', 'ejs');
+    
 
-    app.get('/', (req, res)=>{
+
+    app.get('/', (req, res, err)=>{
+        
         if(!req.cookies){
             console.log('Please, log in')
         }
@@ -162,8 +172,11 @@ mongoClient.connect(function(err, client){
             currentUser = req.cookies.currentUser
         }
         res.render('timer',{currentPuzzle:currentPuzzle,
-            currentUser:req.cookies.currentUser,})
+                            currentUser:req.cookies.currentUser,})
+        
+        
     })
+
     app.post('/login', urlencodedParser, (req, res)=>{
         collectionUsers.findOne({login:req.body.login},(err, doc)=>{
             if(doc){
@@ -196,4 +209,10 @@ mongoClient.connect(function(err, client){
         res.redirect('/')
     })
 
+     app.use(function(req, res, next) {
+            res.status(404).send('404');
+            console.log('err')
+        });
 })
+
+
