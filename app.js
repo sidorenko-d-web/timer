@@ -60,11 +60,6 @@ mongoClient.connect(function(err, client){
             socket.on('getResList',(data)=>{
                 collectionSolves.findOne({name:currentUser, puzzle:currentPuzzle}, function(err,doc){
                     if(doc){
-                        currentBest = doc.best
-                        if(Number(doc.best)>Number(data.solve)){
-                            collectionSolves.updateOne({name:currentUser, puzzle:currentPuzzle},{$set:{best:data.solve}})
-                            socket.emit('newBest',{best:data.solve})
-                        }
                         solves = []
                         for(let i = doc.solves.length; i > 0; i--){
                             solves.unshift(doc.solves[i-1])
