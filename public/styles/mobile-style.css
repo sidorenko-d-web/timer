@@ -217,6 +217,10 @@
         font-size: 30px;
 
     }
+    #login, #password{
+        padding-left: 15px;
+        font-size: 30px
+    }
     .mainSettings form{
         width: 100%;
     }
