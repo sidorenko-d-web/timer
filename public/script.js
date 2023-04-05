@@ -59,8 +59,9 @@ let popupContent2 = document.querySelector('#two')
 let wrapperSettings = document.querySelector('.wrapperSettings')
 let wrapperSettings1 = document.querySelector('.wrapperSettings1')
 let settings = document.querySelector('.settings')
+let twodots = document.querySelector('.twodots')
 
-
+let timeOfBegining
 
 document.getElementsByTagName("body")[0].style.height =( window.innerHeight-20)+'px'
 
@@ -121,6 +122,9 @@ let keyupFunc = async () => {
             sec = 0
             min = 0
             clearDisplay()
+            twodots.style.display = 'none'
+            minpanel.style.display = 'none'
+            timeOfBegining = new Date().getTime()
             Interval = setInterval(startTime,10)
             display.style.color='white'
             counter = false  
@@ -139,15 +143,21 @@ let keydownFunc = () => {
     }else{
         censoredBlock.style.display = 'none'
         clearInterval(Interval)  
-        if(min!= 0){
-            if(sec<=9&&min>0)sec='0'+sec
-            if(ms<=9)ms='0'+ms
-            showRes(min+':'+sec+'.'+ms,scrDisplay.innerHTML)
+        if(minpanel.innerHTML!= 0){
+            if(secpanel.innerHTML>=9){
+                showRes(minpanel.innerHTML+':'+secpanel.innerHTML+'.'+mspanel.innerHTML,scrDisplay.innerHTML)
+            }else{
+                showRes(minpanel.innerHTML+':'+secpanel.innerHTML.slice(0,1)+'.'+mspanel.innerHTML,scrDisplay.innerHTML)
+            }
+            showRes(minpanel.innerHTML+':'+secpanel.innerHTML+'.'+mspanel.innerHTML,scrDisplay.innerHTML)
             
         }
         else{
-            if(ms<=9)ms='0'+ms
-            showRes(sec+'.'+ms,scrDisplay.innerHTML)
+            if(secpanel.innerHTML>=9){
+                showRes(secpanel.innerHTML+'.'+mspanel.innerHTML,scrDisplay.innerHTML)
+            }else{
+                showRes(secpanel.innerHTML.slice(0,1)+'.'+mspanel.innerHTML,scrDisplay.innerHTML)
+            }
         }
         
     }
@@ -165,25 +175,29 @@ let clearDisplay = ()=>{
 }
 
 let startTime = ()=>{
-    ms++
-    if(ms<=99){
-        if(ms<=9) mspanel.innerHTML = `${ms}0`
-        else mspanel.innerHTML = ms
-        
-    }else if(ms == 100){
-        ms = 0
-        sec++
-        mspanel.innerHTML = ms
-        if(sec<=9) secpanel.innerHTML = `0${sec}`
-        else secpanel.innerHTML = sec
+
+    let a = new Date().getTime() - timeOfBegining
+    let b = convertTime(a)
+
+    mspanel.innerHTML = b.slice(6, 8)
+    secpanel.innerHTML = b.slice(3, 5)
+    minpanel.innerHTML = b.slice(0, 2)
+    if(b.slice(0, 2) != '00'){
+        minpanel.style.display = 'block'
+        twodots.style.display = 'block'
+        minpanel.innerHTML = b.slice(0, 2)
+    }else{
+
+        minpanel.style.display = 'none'
+        twodots.style.display = 'none'
     }
-    if(sec == 60){
-        sec = 0
-        min++
-        (min<=9)? minpanel.innerHTML = `0${min}`:minpanel.innerHTML = min
-        secpanel.innerHTML = `0${sec}`
-        mspanel.innerHTML = ms
-    } 
+
+}
+
+let convertTime = (time) => {
+    
+    return new Date(time).toISOString().slice(14, 22);
+
 }
 //работа таблицы результатов
 
@@ -262,18 +276,6 @@ let countAvg = (solves,num)=>{
             lastSolves.push(elem)
         }
     }
-    let best = lastSolves[0]
-    let worst = lastSolves[0]
-    for(let elem of lastSolves){
-        if(best>elem){
-            best = elem
-        }
-        if(worst<elem || elem[0] == "D"){
-            worst = elem
-        }
-    }
-    lastSolves.splice(lastSolves.indexOf(best),1)
-    lastSolves.splice(lastSolves.indexOf(worst),1)
     let sum = 0
 
     let check = true
@@ -386,6 +388,4 @@ showTimeCheck.addEventListener('change', ()=>{
 socket.on('showTimeCheckRes',(bolean)=>{
     showTimeCheck.checked = bolean
 })
-socket.on('newBest',(data) => {
-    bestDisplay.innerHTML = data.best
-})
+
