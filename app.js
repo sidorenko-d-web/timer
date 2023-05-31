@@ -18,8 +18,6 @@ const { connection } = require('mongoose')
 let currentPuzzle = '333'
 let currentUser = null  
 let showTimeCheckStatus = true
-let currentBest = ''
-
 
 mongoClient.connect(function(err, client){
 
@@ -49,7 +47,6 @@ mongoClient.connect(function(err, client){
             collectionSolves.findOne({name:currentUserCookie.currentUser, puzzle:currentPuzzle}, (err,doc)=>{
                 if(doc){
                     socket.emit('getData',{ solves:doc.solves})
-                    socket.emit('newBest',{best:doc.best})
                     
                 }
             })
@@ -74,7 +71,7 @@ mongoClient.connect(function(err, client){
 
                         solves.unshift({solve:data.solve,scramble:data.scramble})
 
-                        collectionSolves.insertOne({name:currentUser, puzzle:currentPuzzle, solves:solves, best:data.solve})
+                        collectionSolves.insertOne({name:currentUser, puzzle:currentPuzzle, solves:solves})
                         socket.emit('showRes',{solves:solves})
                     }
                 })
@@ -89,6 +86,7 @@ mongoClient.connect(function(err, client){
         socket.on('deleteCurrentSession', ()=>{
             collectionSolves.deleteOne({name:currentUser, puzzle:currentPuzzle}, (err, doc)=>{
                 console.log("current session has been deleted")
+                socket.emit('reloadPage')
             })
         })
         socket.on('getDataForPopup',(data)=>{

@@ -144,7 +144,7 @@ let keydownFunc = () => {
         censoredBlock.style.display = 'none'
         clearInterval(Interval)  
         if(minpanel.innerHTML!= 0){
-            if(secpanel.innerHTML>=9){
+            if(secpanel.innerHTML<=9){
                 showRes(minpanel.innerHTML+':'+secpanel.innerHTML+'.'+mspanel.innerHTML,scrDisplay.innerHTML)
             }else{
                 showRes(minpanel.innerHTML+':'+secpanel.innerHTML.slice(0,1)+'.'+mspanel.innerHTML,scrDisplay.innerHTML)
@@ -153,10 +153,10 @@ let keydownFunc = () => {
             
         }
         else{
-            if(secpanel.innerHTML>=9){
-                showRes(secpanel.innerHTML+'.'+mspanel.innerHTML,scrDisplay.innerHTML)
+            if(secpanel.innerHTML<=9){
+                showRes(secpanel.innerHTML.slice(1,2)+'.'+mspanel.innerHTML,scrDisplay.innerHTML)
             }else{
-                showRes(secpanel.innerHTML.slice(0,1)+'.'+mspanel.innerHTML,scrDisplay.innerHTML)
+                showRes(secpanel.innerHTML+'.'+mspanel.innerHTML,scrDisplay.innerHTML)
             }
         }
         
@@ -210,6 +210,14 @@ let showRes = (res,scr)=>{
     })
 
     let updateResPanel = (data)=>{
+        if(!data.solves){
+            prevRes.innerHTML = ''
+            bestDisplay.innerHTML = ''
+            avg5Display.innerHTML = ''
+            avg12Display.innerHTML = ''
+            avg100Display.innerHTML = ''
+            return
+        }
 
         let resStr=''
         if(data.solves.length>=5) avg5Display.innerHTML = countAvg(data.solves,5)
@@ -220,7 +228,45 @@ let showRes = (res,scr)=>{
         if(data.solves.length>=5) avg5DisplayMobile.innerHTML = countAvg(data.solves,5)
         if(data.solves.length>=12) avg12DisplayMobile.innerHTML = countAvg(data.solves,12)
         if(data.solves.length>=100)avg100DisplayMobile.innerHTML = countAvg(data.solves,100)
+        
+        let arrForBest = data.solves.filter(elem => elem.solve[0]!='D')
+        if(arrForBest>[]){
+            let a = arrForBest[0].solve.split('.')
+            if(a[0][0]=='+'){
+                if(a.length==2){
+                    a[0]=Number(a[0].slice(1))+2
+                }else{
+                    a[1]=Number(a)[1].slice(1)+2
+                }
+            }
+            let best = new Date(0,0,0,0,0,Number(a[0]),Number(a[1]))
 
+            for(let i = 1;i<arrForBest.length;i++){
+                
+                let next = arrForBest[i].solve.split('.')
+
+                if(next[0][0]=='+'){
+                    if(next.length==2){
+                        next[0]=Number(next[0].slice(1))+2
+                    }
+                }
+                
+                let a1 = new Date(0,0,0,0,0,Number(next[0]),Number(next[1]))
+                if(a1<best){
+                    best = a1
+                }
+            }
+
+            let min = best.getMinutes()
+            let sec = best.getSeconds()
+            let ms = best.getMilliseconds()
+
+            if(ms<10){ms=`0${ms}`}
+            if(min!=0){bestDisplay.innerHTML = `${min}:${sec}.${ms}`}
+            else{bestDisplay.innerHTML = `${sec}.${ms}`}
+        }else{
+            bestDisplay.innerHTML=''
+        }
         for(let i = 0;i<data.solves.length;i++){
             resStr = resStr+('<span class="solve" id ="'+i+'">' + data.solves[i].solve+'</span><div class="stroke"></div>')
         }
@@ -292,11 +338,6 @@ let countAvg = (solves,num)=>{
 
 deleteAllBtn.addEventListener('click',() => {
     socket.emit('deleteCurrentSession')
-    prevRes.innerHTML = ''
-    avg5Display.innerHTML = ''
-    avg12Display.innerHTML = ''
-    avg100Display.innerHTML = ''
-    bestDisplay.innerHTML = ''
 })
  
 popup.addEventListener('click',() => {
@@ -388,4 +429,8 @@ showTimeCheck.addEventListener('change', ()=>{
 socket.on('showTimeCheckRes',(bolean)=>{
     showTimeCheck.checked = bolean
 })
+socket.on('reloadPage', () =>{
+    location.reload()
+})
+
 
